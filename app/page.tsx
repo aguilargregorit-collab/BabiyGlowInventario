@@ -1,6 +1,6 @@
 'use client';
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { supabase } from '../lib/supabase';
+import { supabase } from './lib/supabase';
 import { Plus, Search, Package, Boxes, DollarSign, AlertTriangle, Pencil, Trash2, ImagePlus, LogOut, X, ArrowUpDown, Download, Sparkles } from 'lucide-react';
 
 type Product = { id: string; name: string; description: string | null; quantity: number; price: number; entry_date: string; image_url: string | null; created_at?: string };
