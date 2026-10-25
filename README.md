@@ -24,3 +24,13 @@ El inicio de sesión por nombre de usuario solamente es una identificación visu
 
 ## Logo
 La interfaz usa una marca tipográfica B&G de muestra con la paleta vino, rosa y dorado. Para insertar el logo oficial, guarda una copia autorizada como `public/logo-babi-glow.jpg` y modifica el componente de marca en `app/page.tsx`.
+
+## Instalar como aplicación (PWA)
+
+El proyecto incluye un `manifest.json`, iconos de instalación basados en el logo oficial de Babi&Glow y un service worker. Después de publicar los cambios en Vercel:
+
+- **Android (Chrome):** abre la URL del inventario, pulsa el menú ⋮ y elige **Instalar aplicación** o **Añadir a pantalla de inicio**.
+- **Windows (Chrome):** abre la URL y usa el icono **Instalar** de la barra de direcciones, si aparece, o el menú ⋮ → **Guardar y compartir** → **Instalar página como aplicación** (el texto puede variar según la versión).
+- La app se mostrará como **Babi&Glow** y se abrirá en una ventana independiente.
+
+La instalación requiere publicar el sitio por HTTPS (Vercel lo proporciona automáticamente). El service worker almacena algunos recursos visuales; el inventario y las operaciones con Supabase siguen necesitando conexión a Internet. La pantalla de acceso actual es un acceso por nombre de usuario local, no autenticación segura con contraseña.
