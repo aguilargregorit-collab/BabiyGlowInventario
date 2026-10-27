@@ -11,10 +11,14 @@ create table if not exists public.products (
   description text,
   quantity integer not null default 0 check (quantity >= 0),
   price numeric(12,2) not null default 0 check (price >= 0),
+  purchase_price numeric(12,2) not null default 0 check (purchase_price >= 0),
   entry_date date not null default current_date,
   image_url text,
   created_at timestamptz not null default now()
 );
+
+-- Compatibilidad con instalaciones previas.
+alter table public.products add column if not exists purchase_price numeric(12,2) not null default 0 check (purchase_price >= 0);
 
 alter table public.products enable row level security;
 drop policy if exists "demo_read_products" on public.products;

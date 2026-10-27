@@ -4,6 +4,7 @@
 -- 1. Nuevos campos sin borrar datos existentes.
 alter table public.products add column if not exists subcategory text;
 alter table public.products add column if not exists image_urls text[] not null default '{}'::text[];
+alter table public.products add column if not exists purchase_price numeric(12,2) not null default 0; -- costo unitario de compra, separado del precio de venta
 create index if not exists products_subcategory_idx on public.products (subcategory);
 
 -- 2. Registro central de subcategorías: NO se crea una tabla por cada etiqueta.
