@@ -11,6 +11,8 @@ Aplicación Next.js para administrar productos, cantidades, precios, fechas e im
 2. Copia `.env.example` a `.env.local`.
 3. En `.env.local`, configura `NEXT_PUBLIC_SUPABASE_URL` y `NEXT_PUBLIC_SUPABASE_ANON_KEY` con los valores de tu proyecto Supabase.
 4. En Supabase → SQL Editor, ejecuta `supabase/schema.sql`.
+5. Para activar subtipos, galerías, edición de términos y métricas de visitas, ejecuta una sola vez `supabase/phase2-catalog-management.sql` en el MISMO proyecto Supabase que usa el catálogo.
+6. Despliega también el ZIP actualizado del catálogo para mostrar el contador de visitas y personas en línea.
 5. Inicia con `npm run dev` y abre `http://localhost:3000`.
 
 ## Despliegue en Vercel
@@ -25,12 +27,12 @@ El inicio de sesión por nombre de usuario solamente es una identificación visu
 ## Logo
 La interfaz usa una marca tipográfica B&G de muestra con la paleta vino, rosa y dorado. Para insertar el logo oficial, guarda una copia autorizada como `public/logo-babi-glow.jpg` y modifica el componente de marca en `app/page.tsx`.
 
-## Instalar como aplicación (PWA)
 
-El proyecto incluye un `manifest.json`, iconos de instalación basados en el logo oficial de Babi&Glow y un service worker. Después de publicar los cambios en Vercel:
+## Funciones añadidas en Fase 2
+- Etiqueta de subtipo por producto (por ejemplo, Bodys, Baggys o Vestidos); el catálogo crea los filtros a partir de las etiquetas usadas.
+- Varias imágenes por producto, selección de portada y eliminación de fotos guardadas.
+- Editor de términos y condiciones que actualiza la tabla compartida `catalog_terms`; el catálogo los recibe mediante Realtime.
+- Panel de métricas: visitantes únicos registrados, visitantes únicos de hoy y navegadores activos en los últimos 90 segundos. El contador empieza a registrar cuando se despliega la migración y el nuevo catálogo; no reconstruye visitas históricas anteriores.
 
-- **Android (Chrome):** abre la URL del inventario, pulsa el menú ⋮ y elige **Instalar aplicación** o **Añadir a pantalla de inicio**.
-- **Windows (Chrome):** abre la URL y usa el icono **Instalar** de la barra de direcciones, si aparece, o el menú ⋮ → **Guardar y compartir** → **Instalar página como aplicación** (el texto puede variar según la versión).
-- La app se mostrará como **Babi&Glow** y se abrirá en una ventana independiente.
-
-La instalación requiere publicar el sitio por HTTPS (Vercel lo proporciona automáticamente). El service worker almacena algunos recursos visuales; el inventario y las operaciones con Supabase siguen necesitando conexión a Internet. La pantalla de acceso actual es un acceso por nombre de usuario local, no autenticación segura con contraseña.
+## Nota de seguridad
+La pantalla de acceso actual solo solicita un nombre y no autentica realmente al usuario. Para mantener la edición de términos funcional con esta demo, la migración habilita escritura pública en `catalog_terms`; cualquiera con acceso al proyecto podría alterar esos términos. Antes de usarlo comercialmente, hay que implementar Supabase Auth y restringir las políticas RLS. Las métricas son aproximadas: identifican navegadores mediante un ID aleatorio local, no verifican identidades humanas, y una persona con varios dispositivos puede contarse varias veces.
