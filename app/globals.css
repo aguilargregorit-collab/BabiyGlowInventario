@@ -42,3 +42,9 @@
 .ledger-note{font-size:.8rem;color:#8e7181;margin:12px 2px 0;line-height:1.5}
 @media(max-width:760px){.ledger-summary{grid-template-columns:repeat(2,minmax(0,1fr))}.ledger-summary>div{padding:11px}.ledger-summary strong{font-size:.95rem}.ledger-date{font-size:.75rem;padding:6px 9px}.ledger-panel .panel-heading{align-items:flex-start}}
 @media(max-width:390px){.ledger-summary{grid-template-columns:1fr 1fr;gap:8px}.ledger-summary small{font-size:.72rem}}
+
+/* Exportación del control financiero y selector de fecha */
+.ledger-export-tools{display:flex;align-items:center;justify-content:flex-end;gap:10px;flex-wrap:wrap}
+.ledger-date-picker{display:flex;align-items:center;gap:8px;padding:8px 10px;border:1px solid #efcddd;border-radius:12px;background:#fff8fb;color:#87365e;font-size:12px;font-weight:600}
+.ledger-date-picker input{border:0;background:transparent;color:#4b2940;font:inherit;min-width:125px;outline:none}
+@media(max-width:640px){.ledger-export-tools{width:100%;justify-content:stretch}.ledger-date-picker{flex:1;justify-content:space-between}.ledger-date-picker input{min-width:0;width:135px}.ledger-export-tools>.primary{justify-content:center;flex:1}}
