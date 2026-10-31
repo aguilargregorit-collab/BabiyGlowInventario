@@ -40,3 +40,7 @@ La pantalla de acceso actual solo solicita un nombre y no autentica realmente al
 
 ### Precios separados
 El inventario distingue `price` (precio de venta que sigue usando el catálogo público) y `purchase_price` (costo de compra para el control interno). Ejecuta la migración `supabase/phase2-catalog-management.sql` antes de usar el nuevo formulario. Los productos existentes reciben `purchase_price = 0` porque el sistema anterior no guardaba su costo; edítalos para registrar el costo real. La presencia en línea se actualiza cada 10 segundos en el panel.
+
+## Diagnóstico de carga de imágenes
+
+En el formulario para agregar o editar un producto, selecciona una imagen y pulsa **Probar lectura y subida de imagen**. La prueba verifica que el navegador pueda leer el archivo, lo sube temporalmente al bucket `productos` de Supabase Storage y consulta su URL pública. Después intenta eliminar el archivo de diagnóstico. Si algo falla, muestra en pantalla en qué etapa ocurrió y el mensaje devuelto por el navegador o Supabase.
