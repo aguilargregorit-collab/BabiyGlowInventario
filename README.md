@@ -44,3 +44,17 @@ El inventario distingue `price` (precio de venta que sigue usando el catálogo p
 ## Diagnóstico de carga de imágenes
 
 En el formulario para agregar o editar un producto, selecciona una imagen y pulsa **Probar lectura y subida de imagen**. La prueba verifica que el navegador pueda leer el archivo, lo sube temporalmente al bucket `productos` de Supabase Storage y consulta su URL pública. Después intenta eliminar el archivo de diagnóstico. Si algo falla, muestra en pantalla en qué etapa ocurrió y el mensaje devuelto por el navegador o Supabase.
+
+
+## Mantenimiento automático de Supabase (72 horas)
+
+Esta versión incorpora una tarea programada de Vercel que se ejecuta diariamente, incluso cuando nadie abre el inventario. Cada ejecución hace una comprobación pequeña en Supabase; el procedimiento registra un pulso de mantenimiento únicamente cuando han pasado al menos 72 horas desde la última escritura real en las tablas compartidas. Las escrituras de productos, términos, visitas del catálogo, eventos del calendario y gastos reinician la referencia de actividad.
+
+### Activación obligatoria
+1. En el SQL Editor del mismo proyecto Supabase, ejecuta `supabase/keepalive.sql` después de las migraciones que crean `catalog_terms` y `catalog_visitors`.
+2. En Vercel → Settings → Environment Variables, agrega `SUPABASE_SERVICE_ROLE_KEY` con la clave `service_role` del proyecto Supabase. Esta clave es secreta: no debe tener prefijo `NEXT_PUBLIC_`, no debe incluirse en el código del navegador ni subirse a GitHub.
+3. Agrega `CRON_SECRET` con una cadena aleatoria larga. Usa el mismo valor para proteger la tarea programada.
+4. Despliega de nuevo el proyecto. `vercel.json` programa `/api/maintenance` diariamente a las 09:00 UTC. Vercel envía el encabezado Bearer con `CRON_SECRET`.
+5. En Vercel → Settings → Cron Jobs, comprueba que aparezca `/api/maintenance`. Revisa sus ejecuciones y errores después del primer día.
+
+La tarea no modifica productos ni datos del catálogo. El endpoint rechaza solicitudes sin el secreto. La función SQL solo puede ejecutarse con el rol `service_role`. Esto reduce el riesgo de pausa por inactividad, pero no constituye una garantía de disponibilidad: Supabase puede aplicar límites, cambios de política o pausas por otros motivos. La consulta diaria ya es una solicitud real a Supabase; el pulso de mantenimiento de la tabla se registra solo al superar las 72 horas sin escrituras de usuario.
